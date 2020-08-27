@@ -27,9 +27,10 @@ if (conf.wifi.mode == wifi.SOFTAP) or (conf.wifi.mode == wifi.STATIONAP) then
 end
 -- These apply only when connecting to a router as a client
 if (conf.wifi.mode == wifi.STATION) or (conf.wifi.mode == wifi.STATIONAP) then
-   conf.wifi.station = {}
-   conf.wifi.station.ssid = "Internet"        -- Name of the WiFi network you want to join
-   conf.wifi.station.pwd =  ""                -- Password for the WiFi network
+   conf.wifi.station = {
+      ssid = "GALAVEYSON",            -- Name of the WiFi network you want to join
+      pwd =  "2gretjochotnerghatwa"   -- Password for the WiFi network
+   }
 end
 
 -- mDNS, applies if you compiled the mdns module in your firmware.
@@ -45,6 +46,10 @@ conf.auth.enabled = false
 -- Displayed in the login dialog users see before authenticating.
 conf.auth.realm = "nodemcu"
 -- Add users and passwords to this table. Do not leave this unchanged if you enable authentication!
-conf.auth.users = {user1 = "password1", user2 = "password2", user3 = "password3"}
+conf.auth.users = {
+   user1 = "password1",
+   user2 = "password2",
+   user3 = "password3"
+}
 
 return conf

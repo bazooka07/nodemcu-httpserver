@@ -6,7 +6,8 @@
 NODEMCU-UPLOADER?=python ../nodemcu-uploader/nodemcu-uploader.py
 
 # Serial port
-PORT?=/dev/cu.SLAB_USBtoUART
+# PORT?=/dev/cu.SLAB_USBtoUART
+PORT?=/dev/ttyUSB0
 SPEED?=115200
 
 define _upload

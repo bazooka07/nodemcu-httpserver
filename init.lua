@@ -15,14 +15,20 @@ if node.getpartitiontable().lfs_size > 0 then
    pcall(node.flashindex("_init"))
 end
 
-if file.exists("httpserver-compile.lua") then
-   dofile("httpserver-compile.lua")
-   file.remove("httpserver-compile.lua")
-end
-
+-- if file.exists("httpserver-compile.lua") then
+--   dofile("httpserver-compile.lua")
+--   file.remove("httpserver-compile.lua")
+-- end
 
 -- Set up NodeMCU's WiFi
-dofile("httpserver-wifi.lc")
+-- dofile("httpserver-wifi.lc")
 
 -- Start nodemcu-httpsertver
-dofile("httpserver-init.lc")
+-- dofile("httpserver-init.lc")
+
+print('chip: ',node.chipid())
+print('heap: ',node.heap())
+
+if file.exists('application.lua') then
+	dofile('application.lua')
+end
