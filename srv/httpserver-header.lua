@@ -13,17 +13,17 @@ return function(connection, code, extension, isGzipped, extraHeaders)
 
    local function getMimeType(ext)
       -- A few MIME types. Keep list short. If you need something that is missing, let's add it.
-      local mt = {css = "text/css", gif = "image/gif", html = "text/html", ico = "image/x-icon", jpeg = "image/jpeg", 
+      local mt = {css = "text/css", gif = "image/gif", html = "text/html", ico = "image/x-icon", jpeg = "image/jpeg",
          jpg = "image/jpeg", js = "application/javascript", json = "application/json", png = "image/png", xml = "text/xml"}
       if mt[ext] then return mt[ext] else return "application/octet-stream" end
    end
 
    local mimeType = getMimeType(extension)
    local statusString = getHTTPStatusString(code)
-   
+
    connection:send("HTTP/1.0 " .. code .. " " .. statusString .. "\r\nServer: nodemcu-httpserver\r\nContent-Type: " .. mimeType .. "\r\n")
    if isGzipped then
-      connection:send("Cache-Control: private, max-age=2592000\r\nContent-Encoding: gzip\r\n")
+      connection:send("Cache-Control: private, max-age=2592000\r\nContent-Encoding: gzip\r\n") -- One month
    end
    if (extraHeaders) then
       for i, extraHeader in ipairs(extraHeaders) do
@@ -34,4 +34,3 @@ return function(connection, code, extension, isGzipped, extraHeaders)
    connection:send("Connection: close\r\n\r\n")
    return statusString
 end
-
