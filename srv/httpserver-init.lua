@@ -13,7 +13,7 @@ local startServer = function(ip)
          location='A tiny HTTP server'
       }
    }
-   filename = 'httpserver-conf.lua'
+   local filename = 'httpserver-conf.lua'
    local conf = file.exists(filename) and dofile(filename) or defaultConf
 
    if (dofile("httpserver.lc")(conf['general']['port'])) then
@@ -21,10 +21,10 @@ local startServer = function(ip)
       print("   http://" .. ip .. ":" ..  conf['general']['port'])
       if (mdns) then
          mdns.register(conf['mdns']['hostname'], { description=conf['mdns']['description'], service="http", port=conf['general']['port'], location=conf['mdns']['location'] })
-         print ('   http://' .. conf['mdns']['hostname'] .. '.local.:' .. conf['general']['port'])
+         print ('   http://' .. conf['mdns']['hostname'] .. '.local:' .. conf['general']['port'])
       end
    end
-   defaultConf, conf = nil, nil
+   defaultConf, conf, filename = nil, nil, nil
 end
 
 if (wifi.getmode() == wifi.STATION) or (wifi.getmode() == wifi.STATIONAP) then
