@@ -30,7 +30,7 @@ return function (port)
          local function startServingStatic(connection, req, args)
             fileInfo = dofile("httpserver-static.lc")(connection, req, args)
          end
-         
+
          local function startServing(fileServeFunction, connection, req, args)
             connectionThread = coroutine.create(function(fileServeFunction, bufferedConnection, req, args)
                fileServeFunction(bufferedConnection, req, args)
@@ -107,6 +107,10 @@ return function (port)
             local auth
             local user = "Anonymous"
 
+            if not conf then
+               conf = { auth={ enable=false } }
+            end
+
             -- as suggest by anyn99 (https://github.com/marcoskirsch/nodemcu-httpserver/issues/36#issuecomment-167442461)
             -- Some browsers send the POST data in multiple chunks.
             -- Collect data packets until the size of HTTP body meets the Content-Length stated in header
@@ -164,7 +168,7 @@ return function (port)
                   end
                elseif connectionThreadStatus == "dead" then
                   -- We're done sending file.
-                  log(connection, "closing connection","thread is dead")
+                  log(connection, "closing connection", "thread is dead")
                   connection:close()
                   connectionThread = nil
                   collectgarbage()
