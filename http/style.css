@@ -1,0 +1,3 @@
+p a { padding: 0.3rem 1rem; }
+p a[href$="on"] { background-color: red; color: #fff; }
+p a[href$="off"] { background-color: lime; color: #fff; }

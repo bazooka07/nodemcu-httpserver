@@ -7,6 +7,21 @@ DURATION=10000
 
 -- led on the board
 ledPin = 4
+gpio.mode(ledPin, gpio.OUTPUT)
+gpio.write(ledPin, gpio.HIGH)
+
+-- AM 2320
+SDA, SCL = 2, 6
+i2c.setup(0, SDA, SCL, i2c.SLOW)
+model, version, serial = am2320.setup()
+print('am2320 : model ' .. model .. ' - version ' .. version .. ' - serial ' .. serial)
+if not tmr.create():alarm(2000, tmr.ALARM_SINGLE, function()
+	rh, t = am2320.read()
+	print(string.format('Temp : %s℃ - Humidité : %s%%', t/10, rh/10))
+end) then
+	print('Whoopsie')
+end
+
 
 function myjob()
 	gpio.write(relayPin, gpio.HIGH)
@@ -28,13 +43,13 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(infos)
 	sntp.sync(
 		{'0.fr.pool.ntp.org', '1.fr.pool.ntp.org'},
 		function(sec, ms, server, info)
-			print('success ntp')
+			print('\nsuccess ntp')
 			print('ip server : '..server)
 			for k,v in pairs(info) do
 					print(k..' : '..v)
 			end
 			tm = rtctime.epoch2cal(rtctime.get())
-			print(string.format("%04d/%02d/%02d %02d:%02d:%02d", tm["year"], tm["mon"], tm["day"], tm["hour"], tm["min"], tm["sec"]))			
+			print(string.format("%04d/%02d/%02d %02d:%02d:%02d", tm["year"], tm["mon"], tm["day"], tm["hour"], tm["min"], tm["sec"]))
 
 			if cron then
 				print('Setup cron')
@@ -47,6 +62,10 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(infos)
 		end
 	)
 
-	require('httpserver-init')
+	startServer = require('httpserver')
+	if startServer  then
+		print('Starting HTTP server')
+		startServer(80)
+	end
 end
 )
