@@ -4,7 +4,7 @@
 
 return function (connection, req, args)
 
-   local cacheControl = not args.isGzipped and "Cache-Control: private, max-age=14400" -- 4 hours
+   local cacheControl = not args.isGzipped and { "Cache-Control: private, max-age=14400" } -- 4 hours
    local buffer = dofile("httpserver-buffer.lc"):new()
    dofile("httpserver-header.lc")(buffer, req.code or 200, args.ext, args.isGzipped, cacheControl)
    -- Send header and return fileInfo

@@ -3,10 +3,18 @@
 ######################################################################
 
 # Path to nodemcu-uploader (https://github.com/kmpm/nodemcu-uploader)
-NODEMCU-UPLOADER?=python ../nodemcu-uploader/nodemcu-uploader.py
+NODEMCU-UPLOADER?=python3 ../nodemcu-uploader/nodemcu-uploader.py
 
 # Serial port
-PORT?=/dev/cu.SLAB_USBtoUART
+ifndef $(PORT)
+  ifneq (,$(findstring indows,$(MAKE_HOST)))
+    PORT := /dev/cu.SLAB_USBtoUART
+  else
+    # linux
+    PORT := /dev/ttyUSB0
+  endif
+endif
+
 SPEED?=115200
 
 define _upload
@@ -29,7 +37,7 @@ usage:
 	@echo "make upload_server        to upload the server code and init.lua"
 	@echo "make upload_all           to upload all"
 
-# Upload one files only
+# Upload one file only
 upload: $(FILE)
 	$(_upload)
 

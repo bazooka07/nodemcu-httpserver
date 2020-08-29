@@ -103,13 +103,10 @@ return function (port)
 
          local function onReceive(connection, payload)
 --            collectgarbage()
-            local conf = dofile("httpserver-conf.lua")
+            local filename = "httpserver-conf.lua"
+            local conf = file.exists(filename) and dofile(filename)
             local auth
             local user = "Anonymous"
-
-            if not conf then
-               conf = { auth={ enable=false } }
-            end
 
             -- as suggest by anyn99 (https://github.com/marcoskirsch/nodemcu-httpserver/issues/36#issuecomment-167442461)
             -- Some browsers send the POST data in multiple chunks.
@@ -130,7 +127,7 @@ return function (port)
             -- parse payload and decide what to serve.
             local req = dofile("httpserver-request.lc")(payload)
             log(connection, req.method, req.request)
-            if conf.auth.enabled then
+            if conf and conf.auth.enabled then
                auth = dofile("httpserver-basicauth.lc")
                user = auth.authenticate(payload) -- authenticate returns nil on failed auth
             end
@@ -189,7 +186,7 @@ return function (port)
                   -- print(fileInfo.file .. ": Sent "..#chunk.. " bytes, " .. fileSize - fileInfo.sent .. " to go.")
                   chunk = nil
                else
-                  log(connection, "closing connetion", "Finished sending: "..fileInfo.file)
+                  log(connection, "closing connection", "Finished sending: "..fileInfo.file)
                   connection:close()
                   fileInfo = nil
                end

@@ -5,18 +5,16 @@
 -- Function for starting the server.
 -- If you compiled the mdns module, then it will also register with mDNS.
 local startServer = function(ip)
-   local conf = dofile('httpserver-conf.lua')
-
-   if not conf then
-      conf = {
-          general={port=80},
-          mdns={
-             hostname='nodemcu',
-             description='Earth'
-             location='A tiny HTTP server'
-          }
+   local defaultConf = {
+      general={port=80},
+      mdns={
+         hostname='nodemcu',
+         description='Earth',
+         location='A tiny HTTP server'
       }
-   end
+   }
+   filename = 'httpserver-conf.lua'
+   local conf = file.exists(filename) and dofile(filename) or defaultConf
 
    if (dofile("httpserver.lc")(conf['general']['port'])) then
       print("nodemcu-httpserver running at:")
@@ -26,7 +24,7 @@ local startServer = function(ip)
          print ('   http://' .. conf['mdns']['hostname'] .. '.local.:' .. conf['general']['port'])
       end
    end
-   conf = nil
+   defaultConf, conf = nil, nil
 end
 
 if (wifi.getmode() == wifi.STATION) or (wifi.getmode() == wifi.STATIONAP) then
