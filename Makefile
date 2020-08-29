@@ -37,11 +37,7 @@ usage:
 	@echo "make upload_server        to upload the server code and init.lua"
 	@echo "make upload_all           to upload all"
 
-<<<<<<< HEAD
-# Upload one files only
-=======
 # Upload one file only
->>>>>>> cacheControl
 upload: $(FILE)
 	$(_upload)
 
